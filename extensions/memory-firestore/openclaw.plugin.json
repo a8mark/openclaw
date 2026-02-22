@@ -1,0 +1,17 @@
+{
+  "id": "memory-firestore",
+  "name": "Memory (Firestore)",
+  "description": "Firestore-backed long-term memory with vector search",
+  "kind": "memory",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "projectId": { "type": "string", "description": "GCP Project ID" },
+      "location": { "type": "string", "default": "us-central1" },
+      "collectionName": { "type": "string", "default": "autumn-memories" },
+      "autoRecall": { "type": "boolean", "default": true },
+      "autoCapture": { "type": "boolean", "default": true }
+    },
+    "required": ["projectId"]
+  }
+}
