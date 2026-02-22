@@ -1,0 +1,14 @@
+{
+  "name": "memory-firestore",
+  "version": "0.0.1",
+  "description": "GCP Firestore-backed vector memory for OpenClaw",
+  "type": "module",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@google-cloud/aiplatform": "^3.34.0",
+    "@google-cloud/firestore": "^7.11.0"
+  },
+  "peerDependencies": {
+    "openclaw": "workspace:*"
+  }
+}
