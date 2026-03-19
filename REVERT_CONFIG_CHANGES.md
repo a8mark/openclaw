@@ -28,5 +28,5 @@ Tracks temporary changes from the 2026-03-13 rescue. See `AUTUMN_CONFIG.md` for 
 ## 4. Infrastructure (Proxmox)
 
 - [x] **VM 100 IP**: DHCP restored. If drops again: `sudo ip addr add 192.168.168.23/24 dev enp6s18`.
-- [x] **VM 102 created**: `autumn-workstation`, Ubuntu 24.04 cloud image, 8 cores, 16GB RAM, 120GB disk, IP `192.168.168.24`. Needs: XFCE4, XRDP, Node.js, claude-code, SSH config entry.
+- [x] **VM 102 created and provisioned**: `autumn-workstation`, Ubuntu 24.04, 8 cores, 16GB RAM, 120GB disk, IP `192.168.168.24`. Installed: xfce4, xrdp, tmux, Node.js 22, claude-code. Users: `markv` (primary), `autumn`. XRDP working via SSH tunnel. SSH config entry `autumn-workstation` added. Mac Desktop shortcut created.
 - [ ] **Serial ports (VM 100/101)**: Added `serial0: socket`. Can keep — useful for console access.

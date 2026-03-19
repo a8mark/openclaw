@@ -19,11 +19,11 @@ Consolidated reference for the Autumn AI assistant deployment on the Autom8ly Pr
 
 ### VMs
 
-| VMID | Name                  | IP                    | User         | Purpose                                   |
-| ---- | --------------------- | --------------------- | ------------ | ----------------------------------------- |
-| 100  | gpumonster-ubuntu2404 | 192.168.168.23 (DHCP) | root         | Inference node, Ollama                    |
-| 101  | moltbot (autumn-vm)   | 192.168.168.22        | autumn       | OpenClaw gateway, primary                 |
-| 102  | autumn-workstation    | 192.168.168.24        | mark, autumn | CLI workstation (tmux, claude-code, XRDP) |
+| VMID | Name                  | IP                    | User          | Purpose                                   |
+| ---- | --------------------- | --------------------- | ------------- | ----------------------------------------- |
+| 100  | gpumonster-ubuntu2404 | 192.168.168.23 (DHCP) | root          | Inference node, Ollama                    |
+| 101  | moltbot (autumn-vm)   | 192.168.168.22        | autumn        | OpenClaw gateway, primary                 |
+| 102  | autumn-workstation    | 192.168.168.24        | markv, autumn | CLI workstation (tmux, claude-code, XRDP) |
 
 ### GPU Passthrough (VM 100)
 
@@ -38,12 +38,41 @@ All access goes through a Cloudflare Zero Trust tunnel via `ssh.chatgenii.com`.
 | Proxmox Host            | `ssh gpumonster`                    |
 | Inference Node (VM 100) | `ssh gpumonster-ubuntu2404`         |
 | Autumn VM (VM 101)      | `ssh autumn-vm` or `ssh moltbot-vm` |
+| Workstation (VM 102)    | `ssh autumn-workstation`            |
 
 VMs are reached via `ProxyJump gpumonster`. Auth tokens expire periodically — re-auth at `https://ssh.chatgenii.com` in a browser.
 
-For direct LAN access (when on the same network): `ssh -o IdentitiesOnly=yes autumn@192.168.168.22`
+For direct LAN access (when on the same network):
+
+- VM 101: `ssh -o IdentitiesOnly=yes autumn@192.168.168.22`
+- VM 102: `ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 markv@192.168.168.24`
 
 Full SSH config: see `ssh-access.md`.
+
+### VM 102 — Autumn Workstation (Machine Shop)
+
+Deployed 2026-03-15. Ubuntu 24.04 cloud image + cloud-init.
+
+**Installed software**: xfce4, xrdp (0.9.24), tmux, Node.js 22, git, build-essential, claude-code (2.1.74)
+
+**Users**:
+
+- `markv` — primary user for CLI subscriptions (claude-code, copilot, codex). Passwordless sudo.
+- `autumn` — system/admin user (created by cloud-init). Passwordless sudo.
+
+**Remote Desktop (XRDP)**:
+
+1. SSH tunnel: `ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 -L 3389:localhost:3389 -N markv@192.168.168.24`
+2. Connect via Microsoft Remote Desktop to `localhost` as `markv`
+3. Or use the `Autumn Workstation.command` shortcut on Mac Desktop
+
+**Cloud-init config**: `/var/lib/vz/snippets/vm102-setup.yaml` on Proxmox host
+
+**Pending setup**:
+
+- SSH key from VM 101 (autumn) → VM 102 (markv) for Autumn to dispatch work
+- crew8 MCP configuration
+- claude-code MCP integration with crew8
 
 ## OpenClaw Gateway (VM 101)
 
